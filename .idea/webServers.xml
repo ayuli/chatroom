@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="dced8615-d58f-4373-bb5d-e0c9d9f1b5fe" name="chatroom" url="http://49.235.47.208">
+        <fileTransfer host="49.235.47.208" port="22" rootFolder="/www/wwwroot/chatroom" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

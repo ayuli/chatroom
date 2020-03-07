@@ -1,0 +1,33 @@
+/* reset */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td{padding: 0;margin: 0;} 
+table{border-collapse:collapse; border-spacing: 0;} 
+fieldset,img,abbr,acronym{border: 0;} 
+address,caption,cite,code,dfn,em,th,var {font-weight: normal;font-style: normal;} 
+ol,ul {list-style: none;} 
+caption,th {text-align: left;} 
+h1,h2,h3,h4,h5,h6 {font-weight: normal;font-size: 100%;}
+h2{font-size:.18rem;}h3{font-size:14rem;}h4{font-size:.12rem;}
+q:before,q:after {content:”;} 
+body{font-size:.12rem;}
+textarea {outline: none; resize: none; overflow:auto;}
+input,label,img,th{vertical-align:middle; border:none;}
+:focus{outline:0;}
+.wrap960,.wrap958{*zoom: 1;}
+a{color:#333; text-decoration:none; cursor:pointer;}
+a img {border: none;text-decoration: none;}
+label, button,a {cursor: pointer;}
+p{word-wrap:break-word;}
+.fl{ float:left;}.fr{ float:right;}
+.fb{ font-weight:bold}.fn{ font-weight:normal}
+del{color:#666;}
+html,body{
+	height: 100%;
+}
+* {
+    box-sizing: border-box;
+}
+body {
+	font-family:-apple-system,"PingFang SC","Helvetica Neue",STHeiti,"Microsoft Yahei",Tahoma,Simsun,sans-serif;
+	color:#333;
+	/* cursor:pointer; */
+}

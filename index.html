@@ -1,0 +1,196 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket聊天室</title>
+    <script src="./static/chat/js/jquery.min.js"></script>
+    <script src="static/layui/layui.js"></script>
+
+    <link rel="stylesheet" href="./static/chat/css/style.css">
+    <link rel="stylesheet" href="./static/layui/css/layui.css">
+</head>
+    <!--header-->
+    <div class="div-header">
+        <a class="logo" href="/">
+            <img src="./static/chat/image/logo.png" alt="logo">
+            <span class="logo-font">聊天室</span>
+        </a>
+        <ul class="layui-nav">
+            <li class="layui-nav-item">
+                <a href="">登录</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="zdiv">
+        <!--聊天内容-->
+        <div class="chat-div" id="scrolldIV">
+
+        </div>
+
+        <div class="div-bb">
+            <div class="h-30 div-bt"></div>
+            <!--<textarea name="" id="" cols="30" rows="10">sdfsdfsd</textarea>-->
+            <div class="textarea" contenteditable="true" ></div>
+            <div class="div-send">
+                <div class="send">发送</div>
+            </div>
+        </div>
+
+    </div>
+
+<body>
+
+
+<script>
+    layui.use('layer', function(){
+        var layer = layui.layer;
+
+        var _username = prompt("请输入用户名");
+        var username = _username.replace(/\s/g,"");
+        var ws = new WebSocket('ws://chat.xiaomeinan.com:9502');
+
+        // 连接
+        ws.onopen = function(res){
+            var msg = '{"type":"login","username":"'+username+'"}';
+            ws.send(msg);
+        };
+        // 处理消息
+        ws.onmessage = function(res){
+            var _d = JSON.parse(res.data);
+            var content = '';
+            var myDate = new Date();
+            var mytime = myDate.toLocaleTimeString();     //获取当前时间
+
+            if(_d.type == 'login'){
+                if( _d.is_me == 1 ){
+
+                    content = "<p class='div-login'>系统消息: "+_d.username+" 欢迎您的到来</p>"
+
+                }else if( _d.is_me == 0 ){
+
+                    content = "<p class='div-login'>系统消息: "+_d.username+" 已上线 </p>"
+
+                }
+
+                $('.chat-div').append(content);
+                // 上线的用户
+                // var _li = '<li>'+_d.username+'</li>';
+                // $('.users ul').append(_li);
+            }else if(_d.type == 'chatMsg'){  //消息内容
+
+                // var _username = $('.username').val();
+                var content = '';
+
+                if( _d.is_me == 1 ){
+
+                    content = "<div>"+
+                                    "<div class='div-date'>"+get_date()+"</div>"+
+                                    "<div class='div-end'>"+
+                                        "<div class='m0505 mw-300'>"+
+                                            "<div class='color-red font-14'>" + _d.username + "</div>"+
+                                            "<div class='div-content'>"+ _d.content +"</div>"+
+                                        "</div>"+
+                                        "<div class='m0505'>"+
+                                            "<img src='./static/chat/image/yyy.jpeg' alt='头像' class='head-portrait'>"+
+                                        "</div>"+
+                                    "</div>"+
+                                "</div>";
+
+                }else if( _d.is_me == 0 ){
+
+                    content = "<div>"+
+                                "<div class='div-date'>"+get_date()+"</div>"+
+                                "<div class='div-start'>"+
+                                    "<div class='m0505'>"+
+                                        "<img src='./static/chat/image/yyy.jpeg' alt='头像' class='head-portrait'>"+
+                                    "</div>"+
+                                    "<div class='m0505 mw-300'>"+
+                                        "<div class='color-red font-14'>" + _d.username + "</div>"+
+                                        "<div class='div-content'>"+ _d.content +"</div>"+
+                                    "</div>"+
+
+                                "</div>"+
+                                "</div>";
+
+                }
+                var div = document.getElementById('scrolldIV');
+                div.innerHTML = div.innerHTML + content ;
+                // $('.chat-div').append(content);
+                div.scrollTop = div.scrollHeight;
+
+            }else if(_d.type == 'loginout'){
+
+                if( _d.is_me == 0 ){
+
+                    content = "<p class='div-login'>系统消息: "+_d.username+" 退出聊天室</p>"
+
+                }
+                $('.chat-div').append(content);
+            }
+
+
+        };
+        // 发送
+        $('.send').click(function(){
+            var _v = $('.textarea').text();
+            // console.log();
+            if(_v.replace(/\s/g,"") == ''){
+                layer.msg('发送消息不能为空')
+                return false;
+            }
+
+            $('.textarea').text('');
+            var msg = '{"type":"chatMsg","content":"'+_v+'"}';
+            ws.send(msg);
+        });
+    });
+
+
+    function getNow(s) {
+        return s < 10 ? '0' + s: s;
+    }
+    function get_date()
+    {
+        var myDate = new Date();
+
+        var year=myDate.getFullYear();        //获取当前年
+        var month=myDate.getMonth()+1;   //获取当前月
+        var date=myDate.getDate();            //获取当前日
+
+        var h=myDate.getHours();              //获取当前小时数(0-23)
+        var m=myDate.getMinutes();          //获取当前分钟数(0-59)
+        var s=myDate.getSeconds();
+
+        var now=year+'/'+getNow(month)+"/"+getNow(date)+" "+getNow(h)+':'+getNow(m)+":"+getNow(s);
+        return now;
+    }
+
+
+
+
+
+
+
+
+
+    // ws.onclose = function(){
+    //     ws.send(username);
+    // }
+    // websocket.onopen = function (evt) {
+    //     console.log("Connected to WebSocket server.");
+    // };
+    // websocket.onmessage = function (evt) {
+    //     console.log('Retrieved data from server: ' + evt.data);
+    // };
+    // websocket.onclose = function (evt) {
+    //     console.log("Disconnected");
+    // };
+    // websocket.onerror = function (evt, e) {
+    //     console.log('Error occured: ' + evt.data);
+    // };
+    // 发送消息
+    // websocket.send('ok');
+</script>
+</body>
+</html>
